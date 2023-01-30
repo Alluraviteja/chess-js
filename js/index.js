@@ -1,12 +1,12 @@
 var noOfRowsAndColumns = 8;
 var startRowNumber = 1;
 var startColumnNumber = 1;
+var chessPiecePawn = "pawn";
 var chessPieceRook = "rook";
 var chessPieceKnight = "knight";
 var chessPieceBishop = "bishop";
 var chessPieceQueen = "queen";
 var chessPieceKing = "king";
-var chessPiecePawn = "pawn";
 var chessPieceWhite = "W";
 var chessPieceBlack = "B";
 
@@ -84,7 +84,7 @@ function createChessBoard() {
 
             //Test
             if (r == 4 && c == 4) {
-                chessPieceType = chessPieceRook;
+                chessPieceType = chessPieceKnight;
                 chessPieceColor = chessPieceBlack;
                 li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
             }
@@ -116,10 +116,10 @@ document.querySelectorAll('.box').forEach(item => {
                 case chessPiecePawn:
                     if (clickedPieceName[0] == chessPieceBlack) {
 
-                        var validMove1 = document.getElementById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + clickedPieceIndexes[2]);
-                        var validMove2 = document.getElementById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 2) + '|' + clickedPieceIndexes[2]);
-                        var validMove3 = document.getElementById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 1));
-                        var validMove4 = document.getElementById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 1));
+                        var validMove1 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + clickedPieceIndexes[2]);
+                        var validMove2 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 2) + '|' + clickedPieceIndexes[2]);
+                        var validMove3 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 1));
+                        var validMove4 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 1));
 
                         if (validMove1.innerHTML)
                             selectedPieceInValidMovesList.push(validMove1);
@@ -150,7 +150,7 @@ document.querySelectorAll('.box').forEach(item => {
                     //Same column negative row
                     var possibleMovePieceColor = false;
                     for (var i = parseInt(clickedPieceIndexes[1]) - 1; i >= startRowNumber; i--) {
-                        var nextElement = document.getElementById(clickedPieceIndexes[0] + '|' + (i) + '|' + clickedPieceIndexes[2]);
+                        var nextElement = getElById(clickedPieceIndexes[0] + '|' + (i) + '|' + clickedPieceIndexes[2]);
                         if (possibleMovePieceColor) {
                             selectedPieceInValidMovesList.push(nextElement);
                         } else if (!nextElement.innerHTML.split('|')[0]) {
@@ -167,7 +167,7 @@ document.querySelectorAll('.box').forEach(item => {
                     //Same column positve row
                     possibleMovePieceColor = false;
                     for (var i = parseInt(clickedPieceIndexes[1]) + 1; i <= noOfRowsAndColumns; i++) {
-                        var nextElement = document.getElementById(clickedPieceIndexes[0] + '|' + (i) + '|' + clickedPieceIndexes[2]);
+                        var nextElement = getElById(clickedPieceIndexes[0] + '|' + (i) + '|' + clickedPieceIndexes[2]);
                         if (possibleMovePieceColor) {
                             selectedPieceInValidMovesList.push(nextElement);
                         } else if (!nextElement.innerHTML.split('|')[0]) {
@@ -184,7 +184,7 @@ document.querySelectorAll('.box').forEach(item => {
                     //Same row negative column
                     possibleMovePieceColor = false;
                     for (var i = parseInt(clickedPieceIndexes[2]) - 1; i >= startColumnNumber; i--) {
-                        var nextElement = document.getElementById(clickedPieceIndexes[0] + '|' + (clickedPieceIndexes[1]) + '|' + i);
+                        var nextElement = getElById(clickedPieceIndexes[0] + '|' + (clickedPieceIndexes[1]) + '|' + i);
                         if (possibleMovePieceColor) {
                             selectedPieceInValidMovesList.push(nextElement);
                         } else if (!nextElement.innerHTML.split('|')[0]) {
@@ -201,7 +201,7 @@ document.querySelectorAll('.box').forEach(item => {
                     //Same column negative row
                     possibleMovePieceColor = false;
                     for (var i = parseInt(clickedPieceIndexes[2]) + 1; i <= noOfRowsAndColumns; i++) {
-                        var nextElement = document.getElementById(clickedPieceIndexes[0] + '|' + (clickedPieceIndexes[1]) + '|' + i);
+                        var nextElement = getElById(clickedPieceIndexes[0] + '|' + (clickedPieceIndexes[1]) + '|' + i);
                         if (possibleMovePieceColor) {
                             selectedPieceInValidMovesList.push(nextElement);
                         } else if (!nextElement.innerHTML.split('|')[0]) {
@@ -217,6 +217,43 @@ document.querySelectorAll('.box').forEach(item => {
 
                     break;
                 case chessPieceKnight:
+
+                    var validMove1 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 2)
+                    );
+                    var validMove2 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 2)
+                    );
+                    var validMove3 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 2)
+                    );
+                    var validMove4 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 2)
+                    );
+                    var validMove5 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 2) + '|' + (parseInt(clickedPieceIndexes[2]) + 1)
+                    );
+                    var validMove6 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 2) + '|' + (parseInt(clickedPieceIndexes[2]) - 1)
+                    );
+                    var validMove7 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 2) + '|' + (parseInt(clickedPieceIndexes[2]) + 1)
+                    );
+                    var validMove8 = getElById(
+                        clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 2) + '|' + (parseInt(clickedPieceIndexes[2]) - 1)
+                    );
+
+                    for (var i = 1; i <= 8; i++) {
+                        if (eval('validMove' + i)) {
+                            if (!eval('validMove' + i).innerText)
+                                selectedPieceValidMovesList.push(eval('validMove' + i));
+                            else if (eval('validMove' + i).innerText && eval('validMove' + i).innerText.split('|')[0] == clickedPieceName[0])
+                                selectedPieceInValidMovesList.push(eval('validMove' + i));
+                            else
+                                selectedPieceValidMovesList.push(eval('validMove' + i));
+                        }
+                    }
+
                     break;
                 case chessPieceBishop:
                     break;
@@ -247,6 +284,10 @@ document.querySelectorAll('.box').forEach(item => {
     })
 
 })
+
+function getElById(cellId) {
+    return document.getElementById(cellId);
+}
 
 function removeAllColorClassInElement(element) {
     element.classList.remove(chessPieceColorLight, chessPieceColorDark, chessPieceColorGreen, chessPieceColorRed);
