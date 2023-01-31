@@ -84,7 +84,7 @@ function createChessBoard() {
 
             //Test
             if (r == 4 && c == 4) {
-                chessPieceType = chessPieceKnight;
+                chessPieceType = chessPieceKing;
                 chessPieceColor = chessPieceBlack;
                 li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
             }
@@ -256,10 +256,35 @@ document.querySelectorAll('.box').forEach(item => {
 
                     break;
                 case chessPieceBishop:
+
+
+
+
                     break;
                 case chessPieceQueen:
                     break;
                 case chessPieceKing:
+
+                    var validMove1 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2])));
+                    var validMove2 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 1));
+                    var validMove3 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 1));
+                    var validMove4 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1])) + '|' + (parseInt(clickedPieceIndexes[2]) - 1));
+                    var validMove5 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1])) + '|' + (parseInt(clickedPieceIndexes[2]) + 1));
+                    var validMove6 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2])));
+                    var validMove7 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 1));
+                    var validMove8 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 1));
+
+                    for (var i = 1; i <= 8; i++) {
+                        if (eval('validMove' + i)) {
+                            if (!eval('validMove' + i).innerText)
+                                selectedPieceValidMovesList.push(eval('validMove' + i));
+                            else if (eval('validMove' + i).innerText && eval('validMove' + i).innerText.split('|')[0] == clickedPieceName[0])
+                                selectedPieceInValidMovesList.push(eval('validMove' + i));
+                            else
+                                selectedPieceValidMovesList.push(eval('validMove' + i));
+                        }
+                    }
+
                     break;
             }
 
