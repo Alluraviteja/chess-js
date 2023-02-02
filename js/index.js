@@ -84,7 +84,7 @@ function createChessBoard() {
 
             //Test
             if (r == 4 && c == 4) {
-                chessPieceType = chessPieceKing;
+                chessPieceType = chessPieceBishop;
                 chessPieceColor = chessPieceBlack;
                 li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
             }
@@ -257,8 +257,46 @@ document.querySelectorAll('.box').forEach(item => {
                     break;
                 case chessPieceBishop:
 
+                    var validMovesArr1 = [];
+                    var validMovesArr2 = [];
+                    var validMovesArr3 = [];
+                    var validMovesArr4 = [];
+                    for (var i = 1; i <= 8; i++) {
+                        validMovesArr1.push(getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - i) + '|' + (parseInt(clickedPieceIndexes[2]) - i)));
 
+                        validMovesArr2.push(getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - i) + '|' + (parseInt(clickedPieceIndexes[2]) + i)));
 
+                        validMovesArr3.push(getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + i) + '|' + (parseInt(clickedPieceIndexes[2]) - i)));
+
+                        validMovesArr4.push(getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + i) + '|' + (parseInt(clickedPieceIndexes[2]) + i)));
+                    }
+
+                    colorValidAndInavlidMoves(validMovesArr1);
+                    colorValidAndInavlidMoves(validMovesArr2);
+                    colorValidAndInavlidMoves(validMovesArr3);
+                    colorValidAndInavlidMoves(validMovesArr4);
+
+                    function colorValidAndInavlidMoves(validMovesArr) {
+                        var nextMoveIsValid = true;
+                        validMovesArr.forEach((validMove, i) => {
+                            if (validMove) {
+                                if (!nextMoveIsValid)
+                                    selectedPieceInValidMovesList.push(validMove);
+                                else if (!validMove.innerText)
+                                    selectedPieceValidMovesList.push(validMove);
+                                else if (validMove.innerText && validMove.innerText.split('|')[0] == clickedPieceName[0]) {
+                                    selectedPieceInValidMovesList.push(validMove);
+                                    nextMoveIsValid = false;
+                                } else if (validMove.innerText && validMove.innerText.split('|')[0] != clickedPieceName[0] && validMovesArr[i - 1].innerText
+                                    && validMovesArr[i - 1].innerText.split('|')[0] != clickedPieceName[0]) {
+                                    selectedPieceInValidMovesList.push(validMove);
+                                    nextMoveIsValid = false;
+                                } else {
+                                    selectedPieceValidMovesList.push(validMove);
+                                }
+                            }
+                        });
+                    }
 
                     break;
                 case chessPieceQueen:
