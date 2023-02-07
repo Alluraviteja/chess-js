@@ -114,7 +114,7 @@ document.querySelectorAll('.box').forEach(item => {
 
             switch (clickedPieceName[1]) {
                 case chessPiecePawn:
-                    if (clickedPieceName[0] == chessPieceBlack) {
+                    if (clickedPieceName[0] == chessPieceBlack && !isWhitePlayerTurn) {
 
                         var validMove1 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 1) + '|' + clickedPieceIndexes[2]);
                         var validMove2 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) + 2) + '|' + clickedPieceIndexes[2]);
@@ -141,7 +141,32 @@ document.querySelectorAll('.box').forEach(item => {
                         if (validMove4 && validMove4.innerText.split('|')[0] == chessPieceWhite)
                             selectedPieceValidMovesList.push(validMove4);
 
-                    } else {
+                    } else if (clickedPieceName[0] == chessPieceWhite && isWhitePlayerTurn) {
+
+                        var validMove1 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + clickedPieceIndexes[2]);
+                        var validMove2 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 2) + '|' + clickedPieceIndexes[2]);
+                        var validMove3 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2]) + 1));
+                        var validMove4 = getElById(clickedPieceIndexes[0] + '|' + (parseInt(clickedPieceIndexes[1]) - 1) + '|' + (parseInt(clickedPieceIndexes[2]) - 1));
+
+                        if (validMove1.innerHTML)
+                            selectedPieceInValidMovesList.push(validMove1);
+                        else
+                            selectedPieceValidMovesList.push(validMove1);
+
+                        if (clickedPieceIndexes[1] == 7 && validMove1.innerText)
+                            selectedPieceInValidMovesList.push(validMove2);
+                        if (clickedPieceIndexes[1] == 7 && !validMove1.innerText && validMove2.innerText.split('|')[0] == clickedPieceName[0])
+                            selectedPieceInValidMovesList.push(validMove2);
+                        else if (clickedPieceIndexes[1] == 7 && !validMove1.innerText && validMove2.innerText.split('|')[0] != clickedPieceName[0])
+                            selectedPieceValidMovesList.push(validMove2);
+                        else if (clickedPieceIndexes[1] == 7)
+                            selectedPieceValidMovesList.push(validMove2);
+
+                        if (validMove3 && validMove3.innerText.split('|')[0] == chessPieceBlack)
+                            selectedPieceValidMovesList.push(validMove3);
+
+                        if (validMove4 && validMove4.innerText.split('|')[0] == chessPieceBlack)
+                            selectedPieceValidMovesList.push(validMove4);
 
                     }
                     break;
@@ -330,7 +355,7 @@ document.querySelectorAll('.box').forEach(item => {
                                 else if (validMove.innerText && validMove.innerText.split('|')[0] == clickedPieceName[0]) {
                                     selectedPieceInValidMovesList.push(validMove);
                                     nextMoveIsValid = false;
-                                } else if (validMove.innerText && validMove.innerText.split('|')[0] != clickedPieceName[0] && validMovesArr[i - 1].innerText
+                                } else if (validMove.innerText && validMove.innerText.split('|')[0] != clickedPieceName[0] && validMovesArr[i - 1] && validMovesArr[i - 1].innerText
                                     && validMovesArr[i - 1].innerText.split('|')[0] != clickedPieceName[0]) {
                                     selectedPieceInValidMovesList.push(validMove);
                                     nextMoveIsValid = false;
@@ -444,11 +469,13 @@ document.querySelectorAll('.box').forEach(item => {
 
             item.innerHTML = toBeMovedChessPiece.innerHTML;
             toBeMovedChessPiece.innerHTML = '';
+
+            changePlayerTurn();
+
             changePieceDefaultBackgroundColor(document.querySelectorAll('.box'));
 
         } else if (item.innerText && item.innerText.split('|')[0] != toBeMovedChessPiece.innerText.split('|')[0]
             && item.classList.contains(chessPieceColorGreen)) {
-
             item.innerHTML = toBeMovedChessPiece.innerHTML;
             toBeMovedChessPiece.innerHTML = '';
             changePieceDefaultBackgroundColor(document.querySelectorAll('.box'));
@@ -458,6 +485,18 @@ document.querySelectorAll('.box').forEach(item => {
     })
 
 })
+
+function changePlayerTurn() {
+
+    if (isWhitePlayerTurn) {
+        isWhitePlayerTurn = false;
+        document.getElementById('playerTurn').innerText = "Black's Turn"
+    } else {
+        isWhitePlayerTurn = true;
+        document.getElementById('playerTurn').innerText = "White's Turn"
+    }
+
+}
 
 function getElById(cellId) {
     return document.getElementById(cellId);
@@ -491,11 +530,6 @@ function chessPiecesMovesColorChange(selectedPieceValidMovesList, selectedPieceI
         removeAllColorClassInElement(el);
         el.classList.add(chessPieceColorRed);
     });
-
-}
-
-function changePlayerTurn() {
-    isWhitePlayerTurn = !isWhitePlayerTurn;
 
 }
 
