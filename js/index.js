@@ -84,8 +84,8 @@ function createChessBoard() {
 
             //Test
             if (r == 4 && c == 4) {
-                chessPieceType = chessPieceQueen;
-                chessPieceColor = chessPieceBlack;
+                chessPieceType = chessPiecePawn;
+                chessPieceColor = chessPieceWhite;
                 li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
             }
 
@@ -472,6 +472,7 @@ document.querySelectorAll('.box').forEach(item => {
             item.innerHTML = toBeMovedChessPiece.innerHTML;
             toBeMovedChessPiece.innerHTML = '';
 
+            getAllPiecesByPlayer(currentPlayerTurn);
             changePlayerTurn();
 
             changePieceDefaultBackgroundColor(document.querySelectorAll('.box'));
@@ -480,6 +481,9 @@ document.querySelectorAll('.box').forEach(item => {
             && item.classList.contains(chessPieceColorGreen)) {
             item.innerHTML = toBeMovedChessPiece.innerHTML;
             toBeMovedChessPiece.innerHTML = '';
+
+            changePlayerTurn();
+
             changePieceDefaultBackgroundColor(document.querySelectorAll('.box'));
 
         }
@@ -535,4 +539,184 @@ function chessPiecesMovesColorChange(selectedPieceValidMovesList, selectedPieceI
 
 }
 
-//B|rook<img class="allimg" src="images/Brook.png" alt="">
+function getAllPiecesByPlayer(currentPlayerTurn) {
+
+    var allLiElements = document.querySelectorAll('li');
+
+    allLiElements.forEach((item, index) => {
+
+        if (item.innerText && item.innerText.startsWith(currentPlayerTurn)) {
+            checkElementForCheckmate(item);
+        }
+
+    });
+
+}
+
+function checkElementForCheckmate(item) {
+
+    var clickedPieceIndexes = item.id.split('|');
+    var clickedPieceName = item.innerText.split('|');
+
+    var cellIdName = clickedPieceIndexes[0];
+    var rowIndex = parseInt(clickedPieceIndexes[1]);
+    var columnIndex = parseInt(clickedPieceIndexes[2]);
+
+    var clicPieceColor = clickedPieceName[0];
+    var clicieceName = clickedPieceName[1];
+
+    if (clickedPieceName[1] == chessPiecePawn) {
+        getCellsForPawnMoves(cellIdName, rowIndex, columnIndex, clicPieceColor);
+    } else if (clickedPieceName[1] == chessPieceRook) {
+        getCellsForStraightMoves(cellIdName, rowIndex, columnIndex);
+    } else if (clickedPieceName[1] == chessPieceKnight) {
+        getCellsForKnightMoves(cellIdName, rowIndex, columnIndex);
+    } else if (clickedPieceName[1] == chessPieceBishop) {
+        getCellsForDiagonalMoves(cellIdName, rowIndex, columnIndex);
+    } else if (clickedPieceName[1] == chessPieceQueen) {
+        getCellsForDiagonalMoves(cellIdName, rowIndex, columnIndex);
+        getCellsForStraightMoves(cellIdName, rowIndex, columnIndex);
+    } else if (clickedPieceName[1] == chessPieceKing) {
+        getCellsForSingleMoves(cellIdName, rowIndex, columnIndex);
+    }
+
+}
+
+function getCellsForDiagonalMoves(cellIdName, rowIndex, columnIndex) {
+
+    var leftTopMoves = [];
+    var rightTopMoves = [];
+    var leftBottomMoves = [];
+    var rightBottomMoves = [];
+
+    for (var i = 1; i <= 8; i++) {
+        leftTopMoves.push(getElById(cellIdName + '|' + (rowIndex - i) + '|' + (columnIndex - i)));
+        rightTopMoves.push(getElById(cellIdName + '|' + (rowIndex - i) + '|' + (columnIndex + i)));
+        leftBottomMoves.push(getElById(cellIdName + '|' + (rowIndex + i) + '|' + (columnIndex - i)));
+        rightBottomMoves.push(getElById(cellIdName + '|' + (rowIndex + i) + '|' + (columnIndex + i)));
+    }
+
+}
+
+function getCellsForStraightMoves(cellIdName, rowIndex, columnIndex) {
+
+    var leftMoves = [];
+    var rightMoves = [];
+    var topMoves = [];
+    var bottomMoves = [];
+
+    for (var i = rowIndex - 1; i >= startRowNumber; i--) {
+        topMoves.push(getElById(cellIdName + '|' + i + '|' + columnIndex));
+    }
+
+    possibleMovePieceColor = false;
+    for (var i = rowIndex + 1; i <= noOfRowsAndColumns; i++) {
+        bottomMoves.push(getElById(cellIdName + '|' + i + '|' + columnIndex));
+    }
+
+    possibleMovePieceColor = false;
+    for (var i = columnIndex - 1; i >= startColumnNumber; i--) {
+        leftMoves.push(getElById(cellIdName + '|' + rowIndex + '|' + i));
+    }
+
+    possibleMovePieceColor = false;
+    for (var i = columnIndex + 1; i <= noOfRowsAndColumns; i++) {
+        rightMoves.push(getElById(cellIdName + '|' + rowIndex + '|' + i));
+    }
+
+}
+
+function getCellsForKnightMoves(cellIdName, rowIndex, columnIndex) {
+
+    var knightMoves = [];
+
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex - 2)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex + 2)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex - 2)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex + 2)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex - 2) + '|' + (columnIndex + 1)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex - 2) + '|' + (columnIndex - 1)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex + 2) + '|' + (columnIndex + 1)));
+    knightMoves.push(getElById(cellIdName + '|' + (rowIndex + 2) + '|' + (columnIndex - 1)));
+
+}
+
+function getCellsForSingleMoves(cellIdName, rowIndex, columnIndex) {
+
+    var singleMoves = [];
+
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex - 1)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex + 1)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex - 1)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex + 1)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex) + '|' + (columnIndex - 1)));
+    singleMoves.push(getElById(cellIdName + '|' + (rowIndex) + '|' + (columnIndex + 1)));
+
+}
+
+function getCellsForPawnMoves(cellIdName, rowIndex, columnIndex, pieceColor) {
+
+    var pawnMoves = [];
+
+    if (pieceColor == chessPieceBlack) {
+
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + columnIndex));
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex + 2) + '|' + columnIndex));
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex + 1)));
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex + 1) + '|' + (columnIndex - 1)));
+
+    } else if (pieceColor == chessPieceWhite) {
+
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + columnIndex));
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex - 2) + '|' + columnIndex));
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex + 1)));
+        pawnMoves.push(getElById(cellIdName + '|' + (rowIndex - 1) + '|' + (columnIndex - 1)));
+
+    }
+
+}
+
+function validateDiagonalMoves() {
+
+}
+
+function validateStraightMoves() {
+
+}
+
+function validateHorseMoves() {
+
+}
+
+function validateSingleMoves() {
+
+}
+
+function validatePawnMoves() {
+
+}
+
+
+
+
+function checkCheckmakeForDiagonalMoves() {
+
+}
+
+function checkCheckmakeForStraightMoves() {
+
+}
+
+function checkCheckmakeForHorseMoves() {
+
+}
+
+function checkCheckmakeForSingleMoves() {
+
+}
+
+function checkCheckmakeForPawnMoves() {
+
+}
