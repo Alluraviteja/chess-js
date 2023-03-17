@@ -83,17 +83,17 @@ function createChessBoard() {
             }
 
             //Test
-            if (r == 4 && c == 4) {
-                chessPieceType = chessPieceKing;
-                chessPieceColor = chessPieceBlack;
-                li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
-            }
+            // if (r == 4 && c == 4) {
+            //     chessPieceType = chessPieceKing;
+            //     chessPieceColor = chessPieceBlack;
+            //     li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
+            // }
 
-            if (r == 5 && c == 1) {
-                chessPieceType = chessPieceQueen;
-                chessPieceColor = chessPieceWhite;
-                li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
-            }
+            // if (r == 5 && c == 1) {
+            //     chessPieceType = chessPieceQueen;
+            //     chessPieceColor = chessPieceWhite;
+            //     li.innerHTML = '' + chessPieceColor + '|' + chessPieceType + '<img class="allimg" src="images/' + chessPieceColor + '' + chessPieceType + '.png" alt="">'
+            // }
 
         }
 
@@ -156,7 +156,7 @@ document.querySelectorAll('.box').forEach(item => {
             } else {
                 toBeMovedChessPiece.innerHTML = item.innerHTML;
                 item.innerHTML = '';
-                alert("Invalid move");
+                alert("Checkmate - cannot make the move");
             }
 
         }
