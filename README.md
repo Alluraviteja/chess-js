@@ -4,7 +4,7 @@
 
 **Features:** 
   
-  **Two-Player Gameplay:** Designed for two players to play on a single machine.
+    **1. Two-Player Gameplay:** Designed for two players to play on a single machine.
   
   **Interactive Chessboard:** Click-and-move functionality for moving chess pieces.
   
